@@ -62,10 +62,9 @@ def generar_pdf(energia, masa, acoplamiento):
     pdf.cell(0, 10, f"Carga explosiva por taladro: {masa:.2f} kg", ln=True)
     pdf.cell(0, 10, f"Acoplamiento del explosivo: {acoplamiento:.1f} %", ln=True)
 
-    buffer = BytesIO()
-    pdf.output(buffer)
-    buffer.seek(0)
-    b64 = base64.b64encode(buffer.read()).decode()
+    pdf_output = pdf.output(dest="S").encode("latin-1")
+    b64 = base64.b64encode(pdf_output).decode("utf-8")
+
     return f'<a href="data:application/pdf;base64,{b64}" download="Blastronix_Explosion_Report.pdf">📄 Descargar PDF</a>'
 
 st.markdown(generar_pdf(explosion_energy_MJ, mass_kg, coupling), unsafe_allow_html=True)
